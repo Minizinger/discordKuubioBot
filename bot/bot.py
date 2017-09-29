@@ -25,7 +25,7 @@ async def on_message(message):
     if message.content.startswith('!myhorses'):
         author = (message.author.nick if message.author.nick else message.author.name)
         myhorses = hb.getMyHorses(message.server.name, author)
-        await client.send_message(message.server, author + ', you have posted ' + myhorses['month'] + ' :horse: this month and ' + myhorses['total'] + ' :horse: since the beginning of time.')
+        await client.send_message(message.server, author + ', you have posted ' + str(myhorses['month']) + ' :horse: this month and ' + str(myhorses['total']) + ' :horse: since the beginning of time.')
     if message.content.startswith('!tophorses'):
         tophorses = hb.getTopHorses(message.server.name, 3)
         if len(tophorses['month']) == 0 and len(tophorses['alltime']) == 0:
@@ -34,11 +34,11 @@ async def on_message(message):
         if len(tophorses['month']) > 0:
             message += "Top posters of this month are: \n"
             for m in tophorses['month']:
-                message += m[0] + " with " + m[1] + " :horse: \n"
+                message += m[0] + " with " + str(m[1]) + " :horse: \n"
         if len(tophorses['alltime']) > 0:
             message += "All time top posters are: \n"
         for m in tophorses['alltime']:
-                message += m[0] + " with " + m[1] + " :horse: \n"
+                message += m[0] + " with " + str(m[1]) + " :horse: \n"
         await client.send_message(message.server, message)
     if '🐴' in message.content or 'horse' in message.content.lower():
         if '🐴' in message.content:
