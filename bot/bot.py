@@ -47,4 +47,4 @@ async def on_message(message):
     if 'hi kuubio' in message.content.lower():
         await client.send_message(message.server, 'HI KUUBIO! :horse:')
 
-client.run('MzYyODg2NTcyNTI3NTgzMjMz.DK7iUQ.ufBzVaQ92XHc4oxUtS-rJD6f7uU')
+client.run('bot token here')
