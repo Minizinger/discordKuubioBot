@@ -23,10 +23,11 @@ class HorseBase:
         horsesperauthor = {}
         for a in authors:
             horsesperauthor[a] = len([e for e in collection if e['author'] == a])
-        for _ in range(topPositions):
-            topresult = max(horsesperauthor.items(), key=operator.itemgetter(1))
-            AlltimeTop.append(topresult)
-            del horsesperauthor[topresult[0]]
+        if len(authors) > 0:
+            for _ in range(topPositions):
+                topresult = max(horsesperauthor.items(), key=operator.itemgetter(1))
+                AlltimeTop.append(topresult)
+                del horsesperauthor[topresult[0]]
         
         MonthTop = []
         collection = self.db[channel].find({'time': {'$gte': datetime.date.today().replace(day=1)}})
@@ -34,10 +35,11 @@ class HorseBase:
         horsesperauthor = {}
         for a in authors:
             horsesperauthor[a] = len([e for e in collection if e['author'] == a])
-        for _ in range(topPositions):
-            topresult = max(horsesperauthor.items(), key=operator.itemgetter(1))
-            MonthTop.append(topresult)
-            del horsesperauthor[topresult[0]]
+        if len(authors) > 0:
+            for _ in range(topPositions):
+                topresult = max(horsesperauthor.items(), key=operator.itemgetter(1))
+                MonthTop.append(topresult)
+                del horsesperauthor[topresult[0]]
 
         return {'alltime': AlltimeTop, 'month': MonthTop}
 
