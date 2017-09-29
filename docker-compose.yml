@@ -3,6 +3,9 @@ services:
     bot:
       build: ./bot
       image: minizinger/kuubio
+      container_name: "bot"
+      links:
+        - mongo
       depends_on:
         - mongo
       command: python3 bot.py
