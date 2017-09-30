@@ -56,11 +56,11 @@ async def on_message(message):
         if len(tophorses['month']) > 0:
             msg += "Top posters of this month are: \n"
             for m in tophorses['month']:
-                msg += "• " m[0] + " with " + str(m[1]) + " :horse: \n"
+                msg += "• " + m[0] + " with " + str(m[1]) + " :horse: \n"
         if len(tophorses['alltime']) > 0:
             msg += "\n\nAll time top posters are: \n"
         for m in tophorses['alltime']:
-                msg += "• " m[0] + " with " + str(m[1]) + " :horse: \n"
+                msg += "• " + m[0] + " with " + str(m[1]) + " :horse: \n"
         await client.send_message(message.server, msg)
         logging.info('Finished !tophorses')
     elif '🐴' in message.content or 'horse' in message.content.lower():
