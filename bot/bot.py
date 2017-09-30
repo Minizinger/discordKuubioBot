@@ -2,6 +2,7 @@ import discord
 import asyncio
 import logging
 from horsebase import HorseBase
+import os
 
 client = discord.Client()
 hb = HorseBase()
@@ -71,4 +72,4 @@ async def on_message(message):
         await client.send_message(message.server, 'HI KUUBIO! :horse:')
         logging.info('Finished hi kuubio')
 
-client.run('bot token here')
+client.run(os.environ.get('DISCORD_TOKEN'))
