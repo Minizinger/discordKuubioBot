@@ -30,6 +30,10 @@ async def on_message(message):
         logging.info('Found !horse')
         await client.send_message(message.server, ':horse:')
         logging.info('Finished !horse')
+    elif message.content.startswith('!sparklehorse') or message.content.startswith('!unicorn'):
+        logging.info('Found !sparklehorse or !unicorn')
+        await client.send_message(message.server, ':unicorn:')
+        logging.info('Finished !sparklehorse or !unicorn')
     elif message.content.startswith('!totalhorses'):
         logging.info('Found !totalhorses')
         await client.send_message(message.server, 'Total amount of ' +
@@ -52,11 +56,11 @@ async def on_message(message):
         if len(tophorses['month']) > 0:
             msg += "Top posters of this month are: \n"
             for m in tophorses['month']:
-                msg += m[0] + " with " + str(m[1]) + " :horse: \n"
+                msg += "• " m[0] + " with " + str(m[1]) + " :horse: \n"
         if len(tophorses['alltime']) > 0:
-            msg += "All time top posters are: \n"
+            msg += "\n\nAll time top posters are: \n"
         for m in tophorses['alltime']:
-                msg += m[0] + " with " + str(m[1]) + " :horse: \n"
+                msg += "• " m[0] + " with " + str(m[1]) + " :horse: \n"
         await client.send_message(message.server, msg)
         logging.info('Finished !tophorses')
     elif '🐴' in message.content or 'horse' in message.content.lower():
@@ -65,11 +69,19 @@ async def on_message(message):
             hb.addHorseToDB(message.server.name, message.timestamp, message.author.nick if message.author.nick else message.author.name)
         await client.add_reaction(message, '🐴')
         logging.info('Finished horse')
+    elif '🦄' in message.content or 'unicorn' in message.content.lower():
+        logging.info('Found unicorn in a message')
+        await client.add_reaction(message, '🦄')
+        logging.info('Finished unicorn')
     else:
         logging.info('No horses found in message')
     if 'hi kuubio' in message.content.lower():
         logging.info('Found hi kuubio')
         await client.send_message(message.server, 'HI KUUBIO! :horse:')
         logging.info('Finished hi kuubio')
+    if 'bye kuubio' in message.content.lower():
+        logging.info('Found bye kuubio')
+        await client.send_message(message.server, 'BYE KUUBIO! :horse:')
+        logging.info('Finished bye kuubio')
 
 client.run(os.environ.get('DISCORD_TOKEN'))
