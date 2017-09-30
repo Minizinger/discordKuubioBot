@@ -1,6 +1,8 @@
 version: '2'
 services:
     bot:
+      env_file:
+        - .env
       build: ./bot
       image: minizinger/kuubio
       container_name: "bot"
