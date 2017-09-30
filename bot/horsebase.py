@@ -24,7 +24,7 @@ class HorseBase:
         authors = list(set([e['author'] for e in collection]))
         horsesperauthor = {}
         for a in authors:
-            horsesperauthor[a] = len([e for e in collection if e['author'] == a])
+            horsesperauthor[a] = self.db[channel].find({'author': a}).count()
         if len(authors) > 0:
             for _ in range(topPositions):
                 topresult = max(horsesperauthor.items(), key=operator.itemgetter(1))
@@ -36,7 +36,7 @@ class HorseBase:
         authors = list(set([e['author'] for e in collection]))
         horsesperauthor = {}
         for a in authors:
-            horsesperauthor[a] = len([e for e in collection if e['author'] == a])
+            horsesperauthor[a] = self.db[channel].find({'author': a, 'time': {'$gte': datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0)}}).count()
         if len(authors) > 0:
             for _ in range(topPositions):
                 topresult = max(horsesperauthor.items(), key=operator.itemgetter(1))
