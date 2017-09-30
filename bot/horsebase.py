@@ -20,25 +20,27 @@ class HorseBase:
 
     def getTopHorses(self, channel, topPositions):
         AlltimeTop = []
-        collection = self.db[channel].find()
-        authors = list(set([e['author'] for e in collection]))
+        authors = self.db[channel].distinct('author')
         horsesperauthor = {}
         for a in authors:
             horsesperauthor[a] = self.db[channel].find({'author': a}).count()
         if len(authors) > 0:
             for _ in range(topPositions):
+                if len(horsesperauthor) == 0:
+                    break
                 topresult = max(horsesperauthor.items(), key=operator.itemgetter(1))
                 AlltimeTop.append(topresult)
                 del horsesperauthor[topresult[0]]
         
         MonthTop = []
-        collection = self.db[channel].find({'time': {'$gte': datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0)}})
-        authors = list(set([e['author'] for e in collection]))
+        authors = self.db[channel].distinct('author', {'time': {'$gte': datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0)}})
         horsesperauthor = {}
         for a in authors:
             horsesperauthor[a] = self.db[channel].find({'author': a, 'time': {'$gte': datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0)}}).count()
         if len(authors) > 0:
             for _ in range(topPositions):
+                if len(horsesperauthor) == 0:
+                    break
                 topresult = max(horsesperauthor.items(), key=operator.itemgetter(1))
                 MonthTop.append(topresult)
                 del horsesperauthor[topresult[0]]
