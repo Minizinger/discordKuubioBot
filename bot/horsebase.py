@@ -1,5 +1,6 @@
 #horsebase = database for storing horses
 from pymongo import MongoClient
+import operator
 import os
 import datetime
 
