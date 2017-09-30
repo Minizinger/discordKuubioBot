@@ -48,16 +48,16 @@ async def on_message(message):
         tophorses = hb.getTopHorses(message.server.name, 3)
         if len(tophorses['month']) == 0 and len(tophorses['alltime']) == 0:
             return
-        message = ""
+        msg = ""
         if len(tophorses['month']) > 0:
-            message += "Top posters of this month are: \n"
+            msg += "Top posters of this month are: \n"
             for m in tophorses['month']:
-                message += m[0] + " with " + str(m[1]) + " :horse: \n"
+                msg += m[0] + " with " + str(m[1]) + " :horse: \n"
         if len(tophorses['alltime']) > 0:
-            message += "All time top posters are: \n"
+            msg += "All time top posters are: \n"
         for m in tophorses['alltime']:
-                message += m[0] + " with " + str(m[1]) + " :horse: \n"
-        await client.send_message(message.server, message)
+                msg += m[0] + " with " + str(m[1]) + " :horse: \n"
+        await client.send_message(message.server, msg)
         logging.info('Finished !tophorses')
     elif '🐴' in message.content or 'horse' in message.content.lower():
         logging.info('Found horse in a message')
