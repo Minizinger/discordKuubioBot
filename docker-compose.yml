@@ -12,6 +12,7 @@ services:
         - mongo
       volumes:
         - ./external_data:/external_data
+        - ./pip_packages:/usr/local/lib/python3.6/site-packages
       command: python3 bot.py
     mongo:
         image: jixer/rpi-mongo
