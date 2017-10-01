@@ -6,7 +6,7 @@ import datetime
 
 class HorseBase:
     def __init__(self):
-        self.client = MongoClient(os.environ.get('MONGO_ADDRESS', ''))
+        self.client = MongoClient(os.environ.get('MONGO_ADDRESS'))
         self.db = self.client['kuubiobot']
 
     def addHorseToDB(self, channel, time, poster):

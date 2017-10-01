@@ -10,6 +10,8 @@ services:
         - mongo
       depends_on:
         - mongo
+      volumes:
+        - ./external_data:/external_data
       command: python3 bot.py
     mongo:
         image: jixer/rpi-mongo

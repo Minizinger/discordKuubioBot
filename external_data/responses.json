@@ -1,0 +1,24 @@
+{
+    "any": {
+        "HI KUUBIO :horse:": [
+            "hi kuubio"
+        ],
+        "BYE KUUBIO :horse:": [
+            "bye kuubio"
+        ]
+    },
+    "start": {
+        ":horse:": [
+            "!horse"
+        ],
+        ":unicorn:": [
+            "!sparkle",
+            "!unicorn",
+            "!magic"
+        ],
+        "!horse to post a :horse: \n!totalhorses for amout of :horse: posted on this server \n!myhorses to tell how many :horse: you posted \n!tophorses to see who posted the most :horse:": [
+            "!help",
+            "!helpme"
+        ]
+    }
+}

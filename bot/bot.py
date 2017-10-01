@@ -2,10 +2,12 @@ import discord
 import asyncio
 import logging
 from horsebase import HorseBase
+from dynamic import Dynamic
 import os
 
 client = discord.Client()
 hb = HorseBase()
+dynamic = Dynamic()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @client.event
@@ -20,20 +22,6 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
             return
-    elif message.content.startswith('!help'):
-        logging.info('Found !help')
-        await client.send_message(message.server, '!horse to post a :horse: \n!totalhorses for amout' +
-        ' of :horse: posted on this server \n!myhorses to tell how many :horse: you posted \n!tophorses' +
-        ' to see who posted the most :horse:')
-        logging.info('Finished !help')
-    elif message.content.startswith('!horse'):
-        logging.info('Found !horse')
-        await client.send_message(message.server, ':horse:')
-        logging.info('Finished !horse')
-    elif message.content.startswith('!sparklehorse') or message.content.startswith('!unicorn'):
-        logging.info('Found !sparklehorse or !unicorn')
-        await client.send_message(message.server, ':unicorn:')
-        logging.info('Finished !sparklehorse or !unicorn')
     elif message.content.startswith('!totalhorses'):
         logging.info('Found !totalhorses')
         await client.send_message(message.server, 'Total amount of ' +
@@ -63,25 +51,28 @@ async def on_message(message):
                 msg += "• " + m[0] + " with " + str(m[1]) + " :horse: \n"
         await client.send_message(message.server, msg)
         logging.info('Finished !tophorses')
-    elif '🐴' in message.content or 'horse' in message.content.lower():
-        logging.info('Found horse in a message')
-        if '🐴' in message.content:
-            hb.addHorseToDB(message.server.name, message.timestamp, message.author.nick if message.author.nick else message.author.name)
-        await client.add_reaction(message, '🐴')
-        logging.info('Finished horse')
-    elif '🦄' in message.content or 'unicorn' in message.content.lower():
-        logging.info('Found unicorn in a message')
-        await client.add_reaction(message, '🦄')
-        logging.info('Finished unicorn')
+
+    # special case for data collectiong
+    if '🐴' in message.content:
+        hb.addHorseToDB(message.server.name, message.timestamp, message.author.nick if message.author.nick else message.author.name)
+    
+    # adding dynamically loaded reactions
+    reactions = dynamic.determineReactions(message.content.lower())
+    if reactions:
+        for reaction in reactions:
+            logging.info('Found ' + reaction + ' in a message')
+            await client.add_reaction(message, reaction)
+            logging.info('Finished ' + reaction)
     else:
-        logging.info('No horses found in message')
-    if 'hi kuubio' in message.content.lower():
-        logging.info('Found hi kuubio')
-        await client.send_message(message.server, 'HI KUUBIO! :horse:')
-        logging.info('Finished hi kuubio')
-    if 'bye kuubio' in message.content.lower():
-        logging.info('Found bye kuubio')
-        await client.send_message(message.server, 'BYE KUUBIO! :horse:')
-        logging.info('Finished bye kuubio')
+        logging.info('No reactions found in message')
+
+    # STATIC RESPONSES
+    response = dynamic.determineResponses(message.content.lower())
+    if response:
+        logging.info('Found response')
+        await client.send_message(message.server, response)
+        logging.info('Finished response')
+    else:
+        logging.info('nothing to respond to')
 
 client.run(os.environ.get('DISCORD_TOKEN'))
