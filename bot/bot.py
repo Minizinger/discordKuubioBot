@@ -67,7 +67,7 @@ async def on_message(message):
         logging.info('No reactions found in message')
 
     # STATIC RESPONSES
-    response = dynamic.determineResponses(message.content.lower())
+    response = dynamic.determineResponse(message.content.lower())
     if response:
         logging.info('Found response')
         await client.send_message(message.server, response)
