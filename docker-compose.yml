@@ -12,7 +12,6 @@ services:
         - mongo
       volumes:
         - ./external_data:/external_data
-        - ./cache:/root/.cache/
       command: python3 bot.py
     mongo:
         image: jixer/rpi-mongo

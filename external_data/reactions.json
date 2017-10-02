@@ -12,16 +12,20 @@
         "🦄",
         "unicorn",
         "sparkle",
-        "sparklehorse",
+        "sparkle horse",
         "✨"
     ],
     "✨": [
         "magic",
+        "magical",
+        "magically",
         "✨"
     ],
     "🐱": [
         "🐱",
+        "sat",
         "cat",
+        "cats",
         "kitten",
         "kitty",
         "meow"
@@ -29,8 +33,16 @@
     "🐶": [
         "🐶",
         "dog",
+        "dogs",
         "doggo",
         "pup",
         "puppy"
+    ],
+    "💩": [
+        "💩",
+        "poo",
+        "shit",
+        "crap",
+        "turd"
     ]
 }
