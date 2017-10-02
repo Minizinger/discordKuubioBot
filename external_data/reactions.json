@@ -4,6 +4,7 @@
         "🐴",
         "horse",
         "horsing",
+        "horsey",
         "long face",
         "neigh"
     ],
@@ -24,5 +25,12 @@
         "kitten",
         "kitty",
         "meow"
+    ],
+    "🐶": [
+        "🐶",
+        "dog",
+        "doggo",
+        "pup",
+        "puppy"
     ]
 }
