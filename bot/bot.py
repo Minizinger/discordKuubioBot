@@ -2,12 +2,12 @@ import discord
 import asyncio
 import logging
 from horsebase import HorseBase
-from dynamic import Dynamic
+from file_config import Config
 import os
 
 client = discord.Client()
 hb = HorseBase()
-dynamic = Dynamic()
+config = Config()
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 @client.event
@@ -25,19 +25,19 @@ async def on_message(message):
     elif message.content.startswith('!totalhorses'):
         logging.info('Found !totalhorses')
         await client.send_message(message.server, 'Total amount of ' +
-        str(hb.getTotalHorses(message.server.name)) + ' :horse: posted in this channel')
+        str(hb.get_total_horses(message.server.name)) + ' :horse: posted in this channel')
         logging.info('Finished !totalhorses')
     elif message.content.startswith('!myhorses'):
         logging.info('Found !myhorses')
         author = (message.author.nick if message.author.nick else message.author.name)
-        myhorses = hb.getMyHorses(message.server.name, author)
+        myhorses = hb.get_my_horses(message.server.name, author)
         await client.send_message(message.server, author + ', you have posted ' +
         str(myhorses['month']) + ' :horse: this month and ' + str(myhorses['total']) +
         ' :horse: since the beginning of time.')
         logging.info('Finished !myhorses')
     elif message.content.startswith('!tophorses'):
         logging.info('Found !tophorses')
-        tophorses = hb.getTopHorses(message.server.name, 3)
+        tophorses = hb.get_top_horses(message.server.name, 3)
         if len(tophorses['month']) == 0 and len(tophorses['alltime']) == 0:
             return
         msg = ""
@@ -52,12 +52,13 @@ async def on_message(message):
         await client.send_message(message.server, msg)
         logging.info('Finished !tophorses')
 
-    # special case for data collectiong
+    # special case for data collecting
     if '🐴' in message.content:
-        hb.addHorseToDB(message.server.name, message.timestamp, message.author.nick if message.author.nick else message.author.name)
+        hb.add_horse_to_db(message.server.name, message.author.nick if message.author.nick else message.author.name)
     
     # adding dynamically loaded reactions
-    reactions = dynamic.determineReactions(message.content.lower())
+    reactions = config.determine_reactions(message.content.lower())
+    print(reactions)
     if reactions:
         for reaction in reactions:
             logging.info('Found ' + reaction + ' in a message')
@@ -67,7 +68,7 @@ async def on_message(message):
         logging.info('No reactions found in message')
 
     # STATIC RESPONSES
-    response = dynamic.determineResponse(message.content.lower())
+    response = config.determine_response(message.content.lower())
     if response:
         logging.info('Found response')
         await client.send_message(message.server, response)

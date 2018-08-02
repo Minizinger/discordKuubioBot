@@ -3,25 +3,10 @@ services:
     bot:
       env_file:
         - .env
-      build: ./bot
+      build: ./
       image: minizinger/kuubio
       container_name: "bot"
-      links:
-        - mongo
-      depends_on:
-        - mongo
-      restart: on-failure
+      restart: always
       volumes:
-        - ./external_data:/external_data
+        - ./db/:/db/
       command: python3 bot.py
-    mongo:
-        image: jixer/rpi-mongo
-        container_name: "mongo"
-        environment:
-          - MONGO_DATA_DIR=/data/db
-          - MONGO_LOG_DIR=/dev/null
-        volumes:
-          - ./data/db:/data/db
-        ports:
-            - 27017:27017
-        command: mongod --smallfiles --logpath=/dev/null # --quiet
