@@ -22,12 +22,12 @@ async def on_ready():
 async def on_message(message):
     if message.author == client.user:
             return
-    elif message.content.startswith('!totalhorses'):
+    elif message.content.startswith('!totalhorse'):
         logging.info('Found !totalhorses')
         await client.send_message(message.server, 'Total amount of ' +
         str(hb.get_total_horses(message.server.name)) + ' :horse: posted in this channel')
         logging.info('Finished !totalhorses')
-    elif message.content.startswith('!myhorses'):
+    elif message.content.startswith('!myhorse'):
         logging.info('Found !myhorses')
         author = (message.author.nick if message.author.nick else message.author.name)
         myhorses = hb.get_my_horses(message.server.name, author)
@@ -35,7 +35,7 @@ async def on_message(message):
         str(myhorses['month']) + ' :horse: this month and ' + str(myhorses['total']) +
         ' :horse: since the beginning of time.')
         logging.info('Finished !myhorses')
-    elif message.content.startswith('!tophorses'):
+    elif message.content.startswith('!tophorse'):
         logging.info('Found !tophorses')
         tophorses = hb.get_top_horses(message.server.name, 3)
         if len(tophorses['month']) == 0 and len(tophorses['alltime']) == 0:

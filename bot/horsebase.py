@@ -11,10 +11,10 @@ HORSES_TABLE = """CREATE TABLE IF NOT EXISTS horses (
                     user text NOT NULL,
                     timestamp datetime
                 );"""
-HORSES_TRIGGER = """CREATE TRIGGER IF NOT EXISTS update_horses_updatetime BEFORE update ON horses 
-                begin
-                update horses set timestamp = strftime('%Y-%m-%d %H:%M:%S:%s','now', 'localtime') where bundle_id = old.bundle_id;
-                end"""
+HORSES_TRIGGER = """CREATE TRIGGER IF NOT EXISTS insert_horses_addtime AFTER INSERT ON horses 
+                BEGIN
+                UPDATE horses SET timestamp = strftime('%Y-%m-%d %H:%M:%S:%s','now', 'localtime') WHERE id = new.id;
+                END"""
 
 def execute(connection, table):
     try:
@@ -28,11 +28,14 @@ def get_current_count(connection, server, user, after_date=None):
         c = connection.cursor()
         sql = "SELECT * FROM horses WHERE server=? AND user=?"
         if after_date is not None:
-            sql = sql + " AND timestamp > {}".format(str(after_date))
+            sql = sql + " AND timestamp > '{}'".format(str(after_date))
 
         c.execute(sql, (server, user))
         res = c.fetchall()
-        return len(res)
+        if type(res) == list:
+            return len(res)
+        else:
+            return 0
     except Exception as e:
         logging.error(e)
 
@@ -41,14 +44,14 @@ def get_top_count(connection, server, num_results=None, after_date=None):
         c = connection.cursor()
         sql = "SELECT user, count(*) as c FROM horses WHERE server=?"
         if after_date is not None:
-            sql = sql + " AND timestamp > {}".format(str(after_date))
+            sql = sql + " AND timestamp >= '{}'".format(str(after_date))
         sql = sql + " GROUP BY user"
         if num_results is not None:
             sql = sql + " LIMIT {}".format(num_results)
 
         c.execute(sql, (server,))
         res = c.fetchall()
-        return len(res)
+        return res
     except Exception as e:
         logging.error(e)
 
@@ -72,8 +75,8 @@ class HorseBase:
         return {'total': total, 'month': month}
 
     def get_top_horses(self, server, num_results):
-        all_top = get_current_count(self.db, server, num_results)
-        month_top = get_current_count(self.db, server, num_results, datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0))
+        all_top = get_top_count(self.db, server, num_results)
+        month_top = get_top_count(self.db, server, num_results, datetime.datetime.today().replace(day=1, hour=0, minute=0, second=0))
 
         return {'alltime': all_top, 'month': month_top}
 
