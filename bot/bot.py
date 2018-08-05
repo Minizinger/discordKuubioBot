@@ -58,7 +58,6 @@ async def on_message(message):
     
     # adding dynamically loaded reactions
     reactions = config.determine_reactions(message.content.lower())
-    print(reactions)
     if reactions:
         for reaction in reactions:
             logging.info('Found ' + reaction + ' in a message')
