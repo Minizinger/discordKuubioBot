@@ -52,6 +52,8 @@ async def on_message(message):
         await client.send_message(message.server, msg)
         logging.info('Finished !tophorses')
 
+    hb.add_message_to_db(message.server.name, message.author.nick if message.author.nick else message.author.name, len(message.content.split(" "))) 
+
     # special case for data collecting
     if '🐴' in message.content:
         await client.add_reaction(message, '🐴')

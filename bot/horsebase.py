@@ -13,7 +13,18 @@ HORSES_TABLE = """CREATE TABLE IF NOT EXISTS horses (
                 );"""
 HORSES_TRIGGER = """CREATE TRIGGER IF NOT EXISTS insert_horses_addtime AFTER INSERT ON horses 
                 BEGIN
-                UPDATE horses SET timestamp = strftime('%Y-%m-%d %H:%M:%S:%s','now', 'localtime') WHERE id = new.id;
+                UPDATE horses SET timestamp = strftime('%Y-%m-%d %H:%M:%S:%s','now', 'utc') WHERE id = new.id;
+                END"""
+MESSAGES_TABLE = """CREATE TABLE IF NOT EXISTS messages (
+                        id integer PRIMARY KEY,
+                        server text NOT NULL,
+                        user text NOT NULL,
+                        words integer NOT NULL,
+                        timestamp datetime
+                    );"""
+MESSAGES_TRIGGER = """CREATE TRIGGER IF NOT EXISTS insert_messages_addtime AFTER INSERT ON messages 
+                BEGIN
+                UPDATE messages SET timestamp = strftime('%Y-%m-%d %H:%M:%S:%s','now', 'utc') WHERE id = new.id;
                 END"""
 
 def execute(connection, table):
@@ -61,11 +72,20 @@ class HorseBase:
         self.db = sqlite3.connect(os.environ.get('DATABASE_FILE'), isolation_level=None)
         execute(self.db, HORSES_TABLE)
         execute(self.db, HORSES_TRIGGER)
+        execute(self.db, MESSAGES_TABLE)
+        execute(self.db, MESSAGES_TRIGGER)
 
     def add_horse_to_db(self, server, user):
         try:
             c = self.db.cursor()
             c.execute("INSERT INTO horses(server, user) VALUES (?, ?)", (server, user))
+        except Exception as e:
+            logging.error(e)
+    
+    def add_message_to_db(self, server, user, words):
+        try:
+            c = self.db.cursor()
+            c.execute("INSERT INTO messages(server, user, words) VALUES (?, ?)", (server, user, words))
         except Exception as e:
             logging.error(e)
 
